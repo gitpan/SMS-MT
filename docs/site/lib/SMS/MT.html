@@ -1,0 +1,271 @@
+<HTML>
+<HEAD>
+<TITLE>SMS::MT - send mobile terminated SMS messages.</TITLE>
+<LINK REL="stylesheet" HREF="../../../Active.css" TYPE="text/css">
+<LINK REV="made" HREF="mailto:">
+</HEAD>
+
+<BODY>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+<TR><TD CLASS=block VALIGN=MIDDLE WIDTH=100% BGCOLOR="#cccccc">
+<FONT SIZE=+1><STRONG><P CLASS=block>&nbsp;SMS::MT - send mobile terminated SMS messages.</P></STRONG></FONT>
+</TD></TR>
+</TABLE>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#class methods">CLASS METHODS</A></LI>
+	<LI><A HREF="#object methods">OBJECT METHODS</A></LI>
+	<LI><A HREF="#optional parameters to send*() methods">OPTIONAL PARAMETERS TO send*() METHODS</A></LI>
+	<LI><A HREF="#developing plugins">DEVELOPING PLUGINS</A></LI>
+	<LI><A HREF="#history">HISTORY</A></LI>
+	<LI><A HREF="#author">AUTHOR</A></LI>
+	<LI><A HREF="#copyright">COPYRIGHT</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P>SMS::MT - send mobile terminated SMS messages.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<PRE>
+    use SMS::MT;</PRE>
+<PRE>
+    my $sm = new SMS::MT('UID' =&gt; 'joeblow',
+                         'PWD' =&gt; 'secret',
+                         'PLUGIN' =&gt; 'WirelessServices');</PRE>
+<PRE>
+    # Send text message
+    unless($sm-&gt;send_text('Hello world!',
+                          '+31611112222',
+                          {'FROM' =&gt; 'Joe'})) {
+     die &quot;Failed to send SMS.\n&quot; .
+         'Error code: ' . $sm-&gt;get_last_error_code() . &quot;\n&quot; .
+         'Error msg: ' . $sm-&gt;get_last_error_message() . &quot;\n&quot;;
+    }</PRE>
+<PRE>
+    # Send picture
+    unless($sm-&gt;send_picture(\$otadata,
+                             '+31611112222',
+                             {'FROM' =&gt; 'Joe',
+                              'MSG' =&gt; 'Like my picture?'})) {
+     die &quot;Failed to send SMS.\n&quot; .
+         'Error code: ' . $sm-&gt;get_last_error_code() . &quot;\n&quot; .
+         'Error msg: ' . $sm-&gt;get_last_error_message() . &quot;\n&quot;;
+    }</PRE>
+<PRE>
+    # Send logo
+    unless($sm-&gt;send_logo(\$otadata,$mccode,'+31611112222')) {
+     die &quot;Failed to send SMS.\n&quot; .
+         'Error code: ' . $sm-&gt;get_last_error_code() . &quot;\n&quot; .
+         'Error msg: ' . $sm-&gt;get_last_error_message() . &quot;\n&quot;;
+    }</PRE>
+<PRE>
+    # Send CLI / group icon to 2 recipients
+    unless($sm-&gt;send_groupicon(\$otadata,'+31611112222,+31600001111')) {
+     die &quot;Failed to send SMS.\n&quot; .
+         'Error code: ' . $sm-&gt;get_last_error_code() . &quot;\n&quot; .
+         'Error msg: ' . $sm-&gt;get_last_error_message() . &quot;\n&quot;;
+    }</PRE>
+<PRE>
+    # Send ringtone
+    my $rtttl = 'Flntstn:d=4,o=5,b=200:g#,c#,8p,c#6,8a#,g#,c#,' .
+                '8p,g#,8f#,8f,8f,8f#,8g#,c#,d#,2f,2p,g#,c#,8p,' .
+                'c#6,8a#,g#,c#,8p,g#,8f#,8f,8f,8f#,8g#,c#,d#,2c#';
+    unless($sm-&gt;send_ringtone($rtttl,'+31611112222)) {
+     die &quot;Failed to send SMS.\n&quot; .
+         'Error code: ' . $sm-&gt;get_last_error_code() . &quot;\n&quot; .
+         'Error msg: ' . $sm-&gt;get_last_error_message() . &quot;\n&quot;;
+    }</PRE>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>SMS::MT is a class that uses plugin modules to send mobile terminated SMS
+messages via a simple and standard interface. All plugins are accessed
+through the methods this class provides.
+This way, only one class and it's methods can be used for different SMS MT
+services without the user having to go into the details of how each of these
+services work.</P>
+<P>
+<HR>
+<H1><A NAME="class methods">CLASS METHODS</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_new">new ('UID' =&gt; $userid, 'PWD' =&gt; $password, 'PLUGIN' =&gt; $plugin);</A></STRONG><BR>
+<DD>
+Returns a new SMS::MT object.
+<P></P>
+<DT><STRONG><A NAME="item_get_plugin_names"><CODE>get_plugin_names()</CODE></A></STRONG><BR>
+<DD>
+Returns a (reference to) an array of installed plugin names depending on the
+context in which this method is called.
+<PRE>
+    Examples:
+    my @plugins_array = SMS::MT-&gt;get_plugin_names();
+    my $plugins_ref = SMS::MT-&gt;get_plugin_names();</PRE>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="object methods">OBJECT METHODS</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_get_last_error_code"><CODE>get_last_error_code()</CODE></A></STRONG><BR>
+<DD>
+Returns the last plugin specific error code.
+<P></P>
+<DT><STRONG><A NAME="item_get_last_error_message"><CODE>get_last_error_message()</CODE></A></STRONG><BR>
+<DD>
+Returns the last plugin specific error message.
+<P></P>
+<DT><STRONG><A NAME="item_get_max_text_length"><CODE>get_max_text_length()</CODE></A></STRONG><BR>
+<DD>
+Returns the maximum text length supported by the current plugin.
+Normally this is 160.
+<P></P>
+<DT><STRONG><A NAME="item_get_service_name"><CODE>get_service_name()</CODE></A></STRONG><BR>
+<DD>
+Get's the current plugin module's descriptive service name.
+<P></P>
+<DT><STRONG><A NAME="item_send_groupicon"><CODE>send_groupicon(\$data,$recipients,\%options)</CODE></A></STRONG><BR>
+<DD>
+Sends a SMS CLI / group icon.
+<P>The first parameter contains a contains a reference to $data, the binary image
+data in OTA bitmap format.</P>
+<P>The second parameter $recipients contains a comma seperated string or a
+reference to an array of recipients in international phone number format.</P>
+<P>The third parameter is optional and if present it then it must be a
+reference to a hash of options. %options may have any of the following
+keys: FROM, VALIDITY, FLASH, CALLBACK.</P>
+<P>The result contains a boolean value.</P>
+<P></P>
+<DT><STRONG><A NAME="item_send_logo">send_logo(\$data,$recipients,$mccode,\%options);</A></STRONG><BR>
+<DD>
+Sends a SMS operator logo.
+<P>The first parameter contains a contains a reference to $data, the binary image
+data in OTA bitmap format.</P>
+<P>The second parameter $recipients contains a comma seperated string or a
+reference to an array of recipients in international phone number format.</P>
+<P>The third parameter $mccode must contain the mc code / operator code used that
+all recipients belong to. It is up to the caller to ensure that all recipients
+in $recipients belong share the same mc code / operator code.</P>
+<P>The fourth parameter is optional and if present it then it must be a
+reference to a hash of options. %options may have any of the following
+keys: FROM, VALIDITY, FLASH, CALLBACK.</P>
+<P>The result contains a boolean value.</P>
+<P></P>
+<DT><STRONG><A NAME="item_send_picture"><CODE>send_picture($data,$recipients,\%options)</CODE></A></STRONG><BR>
+<DD>
+Sends a SMS picture message. See send_groupicon for parameters and result.
+<P>You may also send a text message along with the picture message by adding the
+pair 'MSG' =&gt; $textmessage to the %options hash.</P>
+<P></P>
+<DT><STRONG><A NAME="item_send_ringtone"><CODE>send_ringtone($rtttl,$recipients,\%options)</CODE></A></STRONG><BR>
+<DD>
+Sends a SMS ringtone.
+<P>The first parameter $rtttl contains (a reference to) a RTTTL string.</P>
+<P>The second parameter $recipients contains a comma seperated string or a
+reference to an array of recipients in international phone number format.</P>
+<P>The third parameter is optional and if present it then it must be a
+reference to a hash of options. %options may have any of the following
+keys: <A HREF="#item_FROM"><CODE>FROM</CODE></A>, <A HREF="#item_VALIDITY"><CODE>VALIDITY</CODE></A>, <A HREF="#item_FLASH"><CODE>FLASH</CODE></A>, <A HREF="#item_CALLBACK"><CODE>CALLBACK</CODE></A>, <A HREF="#item_NAME"><CODE>NAME</CODE></A>.</P>
+<P>The result contains a boolean value.</P>
+<P></P>
+<DT><STRONG><A NAME="item_send_text"><CODE>send_text($text,$recipients,\%options)</CODE></A></STRONG><BR>
+<DD>
+Sends an SMS text message.
+<P>The first parameter $text contains the message text.</P>
+<P>The second parameter $recipients contains a comma seperated string or a
+reference to an array of recipients in international phone number format.</P>
+<P>The third parameter is optional and if present it then it must be a
+reference to a hash of options. %options may have any of the following
+keys: FROM, VALIDITY, FLASH, CALLBACK.</P>
+<P>The result contains a boolean value.</P>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="optional parameters to send*() methods">OPTIONAL PARAMETERS TO send*() METHODS</A></H1>
+<P>All send*() methods support optional parameters that are passed as a
+reference to a hash.</P>
+<P>Below is a list of all possible optional parameter keys and what kind of
+values are to be associated with them.</P>
+<DL>
+<DT><STRONG><A NAME="item_FROM">FROM</A></STRONG><BR>
+<DD>
+The value must contain the sender of the message.
+<P></P>
+<DT><STRONG><A NAME="item_VALIDITY">VALIDITY</A></STRONG><BR>
+<DD>
+The value must contain the validity of the message in minutes.
+<P></P>
+<DT><STRONG><A NAME="item_FLASH">FLASH</A></STRONG><BR>
+<DD>
+The value must contain a boolean indicating if this is a flash SMS.
+<P></P>
+<DT><STRONG><A NAME="item_CALLBACK">CALLBACK</A></STRONG><BR>
+<DD>
+The value must contain the callback number.
+<P></P>
+<DT><STRONG><A NAME="item_NAME">NAME</A></STRONG><BR>
+<DD>
+The value must contain the name of the ringtone. This name should override any
+name already specified in the RTTTL string.
+<P></P>
+<DT><STRONG><A NAME="item_MSG">MSG</A></STRONG><BR>
+<DD>
+The value must contain the textual message of a picture message.
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="developing plugins">DEVELOPING PLUGINS</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_Package_name_and_install_location">Package name and install location</A></STRONG><BR>
+<DD>
+Plugin modules must be installed in the subdirectory ``Service'' directly below
+the module SMS::MT.pm. The plugin module's package name will therefore be
+something like SMS::MT::Service::Foo (the plugin filename being Foo.pm and the
+plugin service name being Foo).
+<P></P>
+<DT><STRONG><A NAME="item_Required_methods">Required methods</A></STRONG><BR>
+<DD>
+All object methods published in this documentation must be implemented by the
+plugin module as all object method calls in the package SMS::MT are passed
+through to the plugin module.
+<P>The plugin must also have a <A HREF="#item_new"><CODE>new()</CODE></A> constructor that accepts a hash of parameters
+containing keys: UID and PWD. UID is the user id and PWD is the password needed
+to login to the SMS service.</P>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="history">HISTORY</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_Version_0%2E01_2001%2D10%2D29">Version 0.01  2001-10-29</A></STRONG><BR>
+<DD>
+Initial version
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="author">AUTHOR</A></H1>
+<P>Craig Manley	<A HREF="mailto:c.manley@skybound.nl">c.manley@skybound.nl</A></P>
+<P>
+<HR>
+<H1><A NAME="copyright">COPYRIGHT</A></H1>
+<P>Copyright (C) 2001 Craig Manley &lt;<A HREF="mailto:c.manley@skybound.nl">c.manley@skybound.nl</A>&gt;.  All rights reserved.
+This program is free software; you can redistribute it and/or modify
+it under under the same terms as Perl itself. There is NO warranty;
+not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</P>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>
+<TR><TD CLASS=block VALIGN=MIDDLE WIDTH=100% BGCOLOR="#cccccc">
+<FONT SIZE=+1><STRONG><P CLASS=block>&nbsp;SMS::MT - send mobile terminated SMS messages.</P></STRONG></FONT>
+</TD></TR>
+</TABLE>
+
+</BODY>
+
+</HTML>

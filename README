@@ -1,0 +1,41 @@
+SMS::MT
+=======
+
+Description
+-----------
+
+SMS::MT is a class that uses plugin modules to send mobile terminated SMS
+messages via a simple and standard interface. All plugins are accessed through
+the methods this class provides. This way, only one class and it's methods can
+be used for different SMS MT services without the user having to go into the
+details of how each of these services work.
+I've included a HTML version of the POD docs in the docs subdirectory.
+I've included the specs I used in the specs subdirectory.
+
+Copyright
+---------
+
+Copyright (C) 2001 Craig Manley <c.manley@skybound.nl>. All rights reserved.
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself. There is NO warranty; not even for
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Installation
+------------
+
+Note 1: I added the line "require 5.6.0;" to Makefile.PL because I've only
+tested this module on this version of Perl. You may remove the line if you want
+to try this module on an earlier version of Perl.
+
+Note 2: In order for this module to work, you'll need to install at least one
+plugin module such as SMS::MT::Service::WirelessServices.
+
+ perl Makefile.PL
+ make
+ make install
+ perldoc SMS::MT
+
+Author
+------
+
+Craig Manley c.manley@skybound.nl
