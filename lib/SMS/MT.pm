@@ -28,7 +28,7 @@ use Carp;
 use Exporter();
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(get_plugin_names);
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 1;
 
 ####
@@ -336,7 +336,7 @@ reference to an array of recipients in international phone number format.
 
 The third parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: FROM, VALIDITY, FLASH, CALLBACK.
+keys: FROM, VALIDITY, FLASH, CALLBACK, TYPE.
 
 The result contains a boolean value.
 
@@ -356,7 +356,7 @@ in $recipients belong share the same mc code / operator code.
 
 The fourth parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: FROM, VALIDITY, FLASH, CALLBACK.
+keys: FROM, VALIDITY, FLASH, CALLBACK, TYPE.
 
 The result contains a boolean value.
 
@@ -378,7 +378,7 @@ reference to an array of recipients in international phone number format.
 
 The third parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: C<FROM>, C<VALIDITY>, C<FLASH>, C<CALLBACK>, C<NAME>.
+keys: FROM, VALIDITY, FLASH, CALLBACK, NAME, TYPE.
 
 The result contains a boolean value.
 
@@ -434,6 +434,11 @@ name already specified in the RTTTL string.
 
 The value must contain the textual message of a picture message.
 
+=item TYPE
+
+The type of telephone. This is only relevent for non-textual messages.
+Examples: NOKIA (default), EMS, MOTOROLA, SAGEM.
+
 =back
 
 =head1 DEVELOPING PLUGINS
@@ -466,6 +471,10 @@ to login to the SMS service.
 =item Version 0.01  2001-10-29
 
 Initial version
+
+=item Version 0.02  2002-01-02
+
+Added TYPE optional parameter.
 
 =back
 

@@ -142,7 +142,7 @@ data in OTA bitmap format.</P>
 reference to an array of recipients in international phone number format.</P>
 <P>The third parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: FROM, VALIDITY, FLASH, CALLBACK.</P>
+keys: FROM, VALIDITY, FLASH, CALLBACK, TYPE.</P>
 <P>The result contains a boolean value.</P>
 <P></P>
 <DT><STRONG><A NAME="item_send_logo">send_logo(\$data,$recipients,$mccode,\%options);</A></STRONG><BR>
@@ -157,7 +157,7 @@ all recipients belong to. It is up to the caller to ensure that all recipients
 in $recipients belong share the same mc code / operator code.</P>
 <P>The fourth parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: FROM, VALIDITY, FLASH, CALLBACK.</P>
+keys: FROM, VALIDITY, FLASH, CALLBACK, TYPE.</P>
 <P>The result contains a boolean value.</P>
 <P></P>
 <DT><STRONG><A NAME="item_send_picture"><CODE>send_picture($data,$recipients,\%options)</CODE></A></STRONG><BR>
@@ -174,7 +174,7 @@ Sends a SMS ringtone.
 reference to an array of recipients in international phone number format.</P>
 <P>The third parameter is optional and if present it then it must be a
 reference to a hash of options. %options may have any of the following
-keys: <A HREF="#item_FROM"><CODE>FROM</CODE></A>, <A HREF="#item_VALIDITY"><CODE>VALIDITY</CODE></A>, <A HREF="#item_FLASH"><CODE>FLASH</CODE></A>, <A HREF="#item_CALLBACK"><CODE>CALLBACK</CODE></A>, <A HREF="#item_NAME"><CODE>NAME</CODE></A>.</P>
+keys: FROM, VALIDITY, FLASH, CALLBACK, NAME, TYPE.</P>
 <P>The result contains a boolean value.</P>
 <P></P>
 <DT><STRONG><A NAME="item_send_text"><CODE>send_text($text,$recipients,\%options)</CODE></A></STRONG><BR>
@@ -220,6 +220,11 @@ name already specified in the RTTTL string.
 <DT><STRONG><A NAME="item_MSG">MSG</A></STRONG><BR>
 <DD>
 The value must contain the textual message of a picture message.
+<P></P>
+<DT><STRONG><A NAME="item_TYPE">TYPE</A></STRONG><BR>
+<DD>
+The type of telephone. This is only relevent for non-textual messages.
+Examples: NOKIA (default), EMS, MOTOROLA, SAGEM.
 <P></P></DL>
 <P>
 <HR>
@@ -248,6 +253,10 @@ to login to the SMS service.</P>
 <DT><STRONG><A NAME="item_Version_0%2E01_2001%2D10%2D29">Version 0.01  2001-10-29</A></STRONG><BR>
 <DD>
 Initial version
+<P></P>
+<DT><STRONG><A NAME="item_Version_0%2E02_2002%2D01%2D02">Version 0.02  2002-01-02</A></STRONG><BR>
+<DD>
+Added TYPE optional parameter.
 <P></P></DL>
 <P>
 <HR>
